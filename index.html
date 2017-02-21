@@ -1,0 +1,171 @@
+
+<!DOCTYPE html>
+<html>
+<head>
+
+  <title>My Portfolio</title>
+  <link rel="stylesheet" type="text/css" href="main.css">
+  <link type="text/css" rel="stylesheet" href="https://simplycoding.org/projects.css" />
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">
+  
+  <script src="https://simplycoding.org/files/javascript.js"></script>
+  <script src="https://simplycoding.org/widgets.bundle.js"></script>
+
+  <script>
+  function toggle_visibility(id) {
+        var e = document.getElementById(id);
+        if(e.style.display == 'table'){
+             e.style.display = 'none';
+        }else{
+            e.style.display = 'table';
+            e.style.border = '1px solid black';
+            e.style.padding = '10px';
+            e.style.marginTop = '10px';
+            e.style.marginLeft = '10px';
+            e.style.marginRight = '10px';
+            //e.style.marginBottom = '5px';
+            }
+        }
+  </script>
+  <style>
+    .hi {
+      display:none;
+      color:maroon;
+      width:auto;
+    }
+  </style>
+
+</head>
+<body>
+<div class="container" id="bkground">
+  <br>
+  <div class="row">
+    <div class="col-xs-1 text-center"></div>
+      <div id="logo" class="col-xs-10 text-center">
+        My Coding Projects!
+      </div>
+  </div><!-- end row row-->
+  <div class="row">
+    <div id="links" class="col-sm-12 text-center">
+      Click the Images below to see my coding Projects
+    </div>
+  </div><!-- end row row-->
+
+   <div class="row">
+    <div class="text-center col-xs-12" id="webprojects">Web Projects</div>
+    <div class="col-sm-1 col-xs-0"></div>
+    <div id="images" class="col-xs-12 col-sm-4 text-center">
+      <a href="FirstWebsite/index.html" target="_blank">HTML Website<br><br><img src="FirstWebsite.png" class="img-responsive"></a><br>
+      <p>Straight HTML and CSS minor JavaScript, fixed dimensions.</p>
+    </div>
+    <div class="col-sm-2"></div>
+    <div id="images" class="col-xs-12 col-sm-4 text-center">
+      <a href="ResponsiveWebsite/index.html" target="_blank">Responsive Website<br><br><img src="ResponsiveWebsite.png" class="img-responsive"></a><br>
+      <p>JavaScript form validation and comment post. Bootstrap CSS for responsive website.</p>
+    </div>
+
+  </div><!-- end row row-->
+
+   <div class="row">
+    <div class="text-center col-xs-12" id="jsbg">JavaScript Browser Game Projects</div>
+  </div>
+  <div class="row">
+    <div id="images" class="col-xs-6 col-sm-3 text-center">
+      <a href="GameDesign/pong/index.html" target="_blank">Pong<br><br><img src="Pong.png" class="img-responsive"></a><br>
+      <p>Classic Pong Game.</p>
+    </div>
+    <div id="images" class="col-xs-6 col-sm-3 text-center">
+      <a href="GameDesign/fish/index.html" target="_blank">Fish Game<br><br><img src="Fish.png" class="img-responsive"></a><br>
+      <p>Fish Survival.</p>
+    </div>
+    <div id="images" class="col-xs-6 col-sm-3 text-center">
+      <a href="GameDesign/platform/index.html" target="_blank">Platform<br><br><img src="Platform.png" class="img-responsive"></a><br>
+      <p>Spaceman Platformer Game.</p>
+    </div>
+    <div id="images" class="col-xs-6 col-sm-3 text-center">
+      <a href="GameDesign/custom/index.html" target="_blank">Custom Game<br><br><img src="Custom.png" class="img-responsive"></a><br>
+      <p>Custom Game from what I learned.</p>
+    </div>
+
+  </div><!-- end row row-->
+
+   <div class="row">
+    <div class="text-center col-xs-6" id="jsbgt">Advanced JavaScript Browser Games</div>
+    <div class="text-center col-xs-6" id="jsbgt">Python Code!</div>
+  </div>
+  <div class="row">
+    <div id="images" class="col-xs-12 col-sm-3 text-center">
+      <a href="GameDesignTwo/TowerDefense/index.html" target="_blank">Tower Defense<br><br><img src="TowerDefense.png" class="img-responsive"></a><br>
+      <p>2D Side View Tower Defense.</p>
+    </div>
+    <div id="images" class="col-xs-12 col-sm-3 text-center">
+      <a href="GameDesignTwo/gd2/craft runner/index.html" target="_blank">Racing Game<br><br><img src="ChaseRunner.png" class="img-responsive"></a><br>
+      <p>Custom Racing Game.</p>
+    </div>
+
+    <div id="images" class="col-xs-12 col-sm-3 text-center">
+      <a href="GameDesignTwo/Python/ta/index.html" target="_blank">Text Adventure Game!<br><br><img src="Python.png" class="img-responsive"></a><br>
+      <p>Custom Text Adventure Game.</p>
+    </div>
+
+    <div id="images" class="col-xs-12 col-sm-3 text-center">
+      <a href="GameDesignTwo/Python/mp/index.html" target="_blank">Multiplayer Spaceship Adventure<br><br><img src="https://s3-us-west-2.amazonaws.com/simplycoding/Python/Python.png" alt="" class="img-responsive"></a><br>
+      <p>Create your own spaceship (client) to enter the server world!.</p>
+    </div>
+
+  </div><!-- end row row-->
+
+    <div class="row">
+      <div class="text-center col-xs-12" id="java" style="margin-bottom:10px;">Java Projects</div>
+      <p style="" class="text-center">Some of these Java Projects cannot run in the browser (they use swing to generate a user interface).<br> For those you can view the video of it working and also download the executable '.jar' file to run on your own computer!</p>
+      
+
+      <div id="images" class="col-xs-4 col-sm-4 text-center">
+        <a href="Java/guess.html" target="_blank">Guess My Number!<br><br>
+          <img src="Guess.png" class="img-responsive"></a><br>
+        <p>Guess The Number! You have 8 Chances.</p>
+      </div>
+      <div id="images" class="col-xs-4 col-sm-4 text-center">
+        <a href="Java/sticks.html" target="_blank">Stick Game<br><br>
+          <img src="Stick.png" class="img-responsive"></a><br>
+        <p>Don't be left with the final stick!</p>
+      </div>
+      <div id="images" class="col-xs-4 col-sm-4 text-center">
+        <a href="Java/calc.html" target="_blank">Calculator<br><br>
+          <img src="Calc.png" class="img-responsive"></a><br>
+        <p>Real Working Console Calculator!</p>
+      </div>
+    </div> <!-- end Row-->
+    <div class="row">
+      <div id="images" class="col-xs-4 col-sm-4 text-center">
+        <p onclick="popupv('https://s3-us-west-2.amazonaws.com/simplycoding/Portfolio/Live/TicTacToe.mov','video');" id="bold" class="center" style="color:#008FB2;cursor: pointer;">2-player Tic Tac Toe Game!</p>
+        <img src="TicTacToe.png" class="img-responsive" style="margin:auto"></a><br>
+        
+        <a href="Java/TTT2.png" style="color:brown" target="_blank">Click Here to See the Java Code</a>
+        <br>
+        <a href="https://s3-us-west-2.amazonaws.com/simplycoding/Portfolio/Live/TicTacToe.jar">Download the Executable Jar File.</a>
+      </div>
+      <div id="images" class="col-xs-4 col-sm-4 text-center">
+        <p onclick="popupv('https://s3-us-west-2.amazonaws.com/simplycoding/Portfolio/Live/TicTacToee.mov','video');" id="bold" class="center" style="color:#008FB2;cursor: pointer;">3-player Tic Tac Toe Game!</p>
+        <img src="TicTacToe3.png" class="img-responsive" style="margin:auto"></a><br>
+        
+        <a href="Java/TTTjava.png" style="color:brown" target="_blank">Click Here to See the Java Code</a>
+        <br>
+        <a href="https://s3-us-west-2.amazonaws.com/simplycoding/Portfolio/Live/TicTacToe3.jar">Download the Executable Jar File.</a>
+      </div>
+
+      <div id="images" class="col-xs-4 col-sm-4 text-center">
+       <p onclick="popupv('https://s3-us-west-2.amazonaws.com/simplycoding/Portfolio/Live/Puzzle.mov','video');" id="bold" class="center" style="color:#008FB2;cursor: pointer;">Puzzle Shuffler!</p>
+        <img src="Puzzle.png" class="img-responsive" style="margin:auto"></a><br>
+        
+        <a href="https://s3-us-west-2.amazonaws.com/simplycoding/Portfolio/Live/PuzzleCode.mov" style="color:brown" target="_blank">Click Here to See the Java Code</a>
+        <br>
+        <a href="https://s3-us-west-2.amazonaws.com/simplycoding/Portfolio/Live/Puzzle.jar">Download the Executable Jar File.</a>
+      </div>
+
+    </div><!-- end row row-->
+<br><br><br><br><br><br><br><br><br><br><br><br>
+</div> <!-- end container -->
+
+</body>
+</html>
