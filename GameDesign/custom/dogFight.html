@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<title> Game </title>
+		<script src="https://simplycoding.org/files/simplyjs/simply.js"></script>
+		<script>
+			function start(){
+				sjs.open("target",800,500);
+				var background = new sjs.Image("ShowcaseImages/skybackground.png");
+				background.setSize(100000,500);
+				var scroll = new sjs.Image("");
+				scroll.node.style.zIndex = -1;
+				var player = new sjs.Image("ShowcaseImages/Plane3Right.png");
+				var playerUp = false;
+				var keyUp;
+				var dead = false;
+				var go = false;
+				var count = 0;
+				player.setSize(75,50);
+				player.type="player";
+				player.friction = 0.1;
+				player.node.style.zIndex = 1;
+				player.angle = 0;
+				sjs.scrollable(scroll,background);
+				var startText;
+				setTimeout(function(){
+					startText = new sjs.Text("Ready!", 28, "red");
+					startText.center();
+				},1000);
+				
+				setTimeout(function(){
+					startText.setText("Go!", 28, "green")
+					player.setGravity();
+					go = true;
+					setInterval(function(){
+						if(player.angle<=90&&!playerUp){
+							player.angle+= 6;
+							player.node.style.transform = "rotate("+player.angle+"deg)";
+						}
+						if(player.getY()>=400&&!dead){
+							dead = true;
+							var explosion = new sjs.Image("ShowcaseImages/explosion-1.gif");
+							explosion.moveTo(player.getX(),player.getY());
+							player.destroy();
+							setTimeout(function(){
+								window.location = "index.html";
+							},1000);
+						}
+							scroll.pushRight(1);
+							player.moveTo(scroll.getX()-250,player.getY());
+					},50);
+				},2000);
+				setInterval(function(){
+					var cloud = new sjs.Image("ShowcaseImages/cloud1.png");
+					cloud.moveTo(player.getX()+800,player.getY()+Math.random()*50);
+					cloud.type = "cloud";
+					if(count<=10){
+						var enemy = new sjs.Image("ShowcaseImages/blimpblue.png");
+						enemy.type = "enemy";
+						enemy.moveTo(player.getX()+800,player.getY());
+						enemy.setSize(100,50);
+						enemy.pushRight(10);
+						setTimeout(function(){
+							var enBullet = new sjs.Image("ShowcaseImages/laser.png");
+							enBullet.setSize(50,25);
+							enBullet.moveTo(enemy.getX(),enemy.getY());
+							enBullet.pushLeft(30);
+							enBullet.type = "enemy";
+						},1000);
+					}else if(count==11){
+						var enemy = new sjs.Image("ShowcaseImages/blimpblue.png");
+						enemy.type = "boss";
+						enemy.moveTo(player.getX()+800,player.getY());
+						enemy.setSize(100,50);
+						setInterval(function(){
+							var enBullet = new sjs.Image("ShowcaseImages/laser.png");
+							enBullet.setSize(50,25);
+							enBullet.moveTo(enemy.getX(),enemy.getY());
+							enBullet.pushLeft(15);
+							enBullet.type = "enemy";
+							
+						},500);
+						setInterval(function(){
+							enemy.moveTo(player.getX()+550,player.getY());
+						},50);
+					}
+					count++;
+				},2500);
+				sjs.keyDown(UP_KEY,function(){
+					if(go){
+						clearTimeout(keyUp);
+						keyUp = setTimeout(function(){
+							playerUp = false;
+						},100);
+						if(player.angle<=0){
+							player.pushUp(2);
+						}
+						player.node.style.transform = "rotate("+player.angle+"deg)";
+						playerUp = true;
+						if(player.angle>=-50){
+							player.angle-=6;
+						}	
+					}
+						
+				});
+				sjs.keyDown(DOWN_KEY,function(){
+					if(go){
+						if(player.angle<=0){
+							player.pushDown(2);
+						}
+						player.node.style.transform = "rotate("+player.angle+"deg)";
+						if(player.angle<=75){
+							player.angle+=4;
+						}	
+					}
+					
+				});
+				var canshoot = true;
+				sjs.keyDown(SPACE_KEY,function(){
+					if(canshoot){
+						canshoot = false;
+						var bullet = new sjs.Image("ShowcaseImages/laser.png");
+						bullet.moveTo(player.getX()+70,player.getY()+10);
+						bullet.noBounds = true;
+						bullet.type = "bullet";
+						if(player.angle>=45){
+							bullet.pushRight(30).pushDown(10);
+							bullet.node.style.transform = "rotate("+player.angle+"deg)"
+						}else if(player.angle<=45&&player.angle>=-45){
+							bullet.pushRight(30);
+							bullet.node.style.transform = "rotate("+0+"deg)"
+						}else{
+							bullet.pushRight(30).pushDown(-10);
+							bullet.node.style.transform = "rotate("+player.angle+"deg)"
+						}
+						setTimeout(function(){
+							canshoot = true;
+						},500);
+						//bullet.pushUp(30);
+						bullet.setSize(50,45);
+						bullet.friction = 0;
+					}
+				});
+				sjs.onHit("player","enemy", function(x,y){
+					dead = true;
+					var explosion = new sjs.Image("ShowcaseImages/explosion-1.gif");
+					explosion.moveTo(player.getX(),player.getY()-100);
+					player.destroy();
+					y.destroy();
+					setTimeout(function(){
+						window.location = "gameover.html";
+					},1000);
+				});	
+				sjs.onHit("bullet","enemy", function(x,y){
+					dead = true;
+					var explosion = new sjs.Image("ShowcaseImages/explosion-1.gif");
+					explosion.setSize(100,50);
+					explosion.moveTo(y.getX(),y.getY()-100);
+					setTimeout(function(){
+						explosion.destroy();
+					},1000);
+					x.destroy();
+					y.destroy();
+				});	
+				sjs.onHit("bullet","boss", function(x,y){
+					dead = true;
+					var explosion = new sjs.Image("ShowcaseImages/explosion-1.gif");
+					explosion.setSize(100,50);
+					explosion.moveTo(y.getX(),y.getY()-100);
+					setTimeout(function(){
+						explosion.destroy();
+					},1000);
+					x.destroy();
+					y.destroy();
+					setTimeout(function(){
+						window.location = "win.html";
+					},1000);
+				});	
+				sjs.onHit("player","cloud", function(x,y){
+					y.destroy();
+					
+				});	
+				//player.follow(sjs.mouse.getY());
+				}//end function start
+		</script>
+	</head>
+	<body onload="start()">
+		<div id="target" style="margin:auto;background:orange;"></div>
+	</body>
+</html>

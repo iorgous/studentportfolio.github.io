@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<title> Game Over </title>
+		<script src="https://simplycoding.org/files/simplyjs/simply.js"></script>
+		<script>
+			function start(){
+			sjs.open();
+			var gameover_txt = new sjs.Text("You lost!", 44, "orange");
+			gameover_txt.center().offset(0,-50);
+			var restartBtn = new sjs.Button("Try Again?", function(){
+			window.location = "index.html";
+				});
+			restartBtn.center();
+
+			}//end function start
+		</script>
+	</head>
+	<body onload="start()">
+		<h1> Gameover </h1>
+
+		<div id="target" style="margin:auto;background:grey;"></div>
+	</body>
+</html>
