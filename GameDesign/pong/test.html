@@ -1,0 +1,101 @@
+<!doctype html>
+<html>
+<head>
+  <title>SimplyJS</title>
+  <style>
+  body {
+    background-color:lightgreen;
+  }
+  #target {
+    background-color:lightblue;
+    overflow:hidden;
+    margin:auto;
+    border: 2px outset #e8892d;
+    border-radius:5px;
+  }
+  </style>
+
+  <script src="simply.js"></script>
+  <script>
+
+  function start(){
+
+    sjs.open("target");
+
+    sjs.makeStage("game");
+
+    var ball = new sjs.Image("s.png", 50,50);
+    ball.type = "ball";
+    ball.friction = 0;
+    ball.bounce();
+
+    var paddle1 = new sjs.Image("paddle.png", 100,20);
+    paddle1.type="paddle";
+    paddle1.centerH();
+
+    var paddle2 = new sjs.Image("paddle2.png", 100,20);
+    paddle2.type="paddle";
+    paddle2.moveTo(0,400);
+    paddle2.centerH();
+
+    sjs.onHit("ball", ["top_screen","bottom_screen"], function(ball,screen){
+      sjs.setStage("gameover");
+    });
+
+    sjs.onHit("ball", "paddle", function(ball,paddle){
+      score++;
+      score_txt.setText("Score: "+score);
+      sjs.bounceOff(ball, paddle);
+    });
+    
+   
+
+    sjs.keyDown( LEFT_KEY, function(){ paddle1.pushLeft();
+                                       paddle2.pushLeft(); });
+    sjs.keyDown(RIGHT_KEY, function(){ paddle1.pushRight();
+                                       paddle2.pushRight();});
+
+    var score = 0;
+    var score_txt = new sjs.Text("Score: 0", 21, "blue");
+    //score_txt.bottom().right().offset(-25,-10);
+
+    sjs.makeStage("menu");
+
+    var startBtn = new sjs.Button("Start", function(){
+      score = 0;
+      score_txt.setText("Score: "+score);
+      sjs.setStage("game");
+      ball.stop().center();
+      ball.sx=5;
+      ball.sy=-8; 
+      startBtn.setText("Replay?");
+    },18);
+    startBtn.center().offset(-15.5,-2);
+    
+    var title = new sjs.Text("Pong Project",28,"#e8892d")
+    title.centerH().offset(0,55);
+
+    paddle1.followx(sjs.mouse);
+    paddle2.followx(sjs.mouse);
+
+    sjs.makeStage("gameover");
+
+    sjs.addToStage(title);
+    sjs.addToStage(score_txt);
+    sjs.addToStage(startBtn);
+
+    var gameover_msg = new sjs.Text("Game Over", 21, "red");
+    gameover_msg.centerH().offset(0,100);
+
+    sjs.setStage("menu");
+  }
+
+  </script>
+
+</head>
+<body onload="start();">
+
+<div id="target"></div>
+
+</body>
+</html>
