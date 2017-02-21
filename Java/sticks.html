@@ -1,0 +1,108 @@
+<html>
+<head>
+	<link type="text/css" rel="stylesheet" href="https://simplycoding.org/projects.css" />
+	<script src="https://simplycoding.org/files/javascript.js"></script>
+	<script src="https://simplycoding.org/files/run-the-code.js"></script>
+	<script src="https://simplycoding.org/files/simplyjs/simply.js"> </script>
+	<title>Python Text Adventure</title>
+	<style type="text/css">
+		.run-the-code-output {
+			height:200px;
+			overflow: scroll;
+		}
+
+	</style>
+
+
+</head>
+
+
+<body>	
+
+
+<div style="float:right;width:60%"> 
+	
+<textarea class="run-the-code" data-mode="java" data-height="300" data-output="120px"> 
+Scanner input = new Scanner (System.in);
+int numSticks = 21;
+int sticksTaken = 0;
+String playAgain = "y";
+String answer = " ";
+boolean playersTurn = false;
+
+while(playAgain.equalsIgnoreCase("y")){
+
+  System.out.println("Don't end up with the last stick");
+  System.out.println("Would you like to go first? y/n");
+
+  answer = input.next();
+
+  if(answer.equalsIgnoreCase("y")){
+      playersTurn = true;
+  }
+
+
+  while(numSticks >= 0){
+
+      if(playersTurn == true){
+          System.out.println("There are " + numSticks + " sticks");
+          System.out.println("How many sticks would you like to take away (1 or 2) ");
+          sticksTaken = input.nextInt();
+          if(sticksTaken > 2){
+              sticksTaken = 2;
+          }
+          if(sticksTaken < 1){
+              sticksTaken = 1;
+          }
+          
+          numSticks = numSticks-sticksTaken;
+          if(numSticks == 1){
+              System.out.println("Congratulation you won ");
+              break;
+          }
+          if(numSticks <= 0){
+              System.out.println("Sorry you lose");
+              break;
+          }
+       
+          
+          playersTurn = false;
+      } else {
+          if((numSticks-2) %3==0 || numSticks-2==0){
+              numSticks = numSticks-1;
+              System.out.println("The computer took 1 stick");
+          } else {
+              numSticks = numSticks-2;
+              System.out.println("The computer took 2 sticks");
+          }
+
+          if(numSticks == 1){
+              System.out.println("Sorry you lose ");
+              break;
+          }
+          playersTurn = true;                    
+      }
+  }
+
+  System.out.println("Do you want to play again? ");
+  playAgain = input.next();
+    
+  if(playAgain.equalsIgnoreCase("n")){
+    System.out.println("Thanks for playing");
+    break;
+  }
+}  
+            
+</textarea>
+
+</div>
+<div style="float:left;width:35%">
+        <h1 style="text-align:center">JAVA - Stick Game!</h1>
+    <h2 style="text-align:center;color:blue;">Click 'Run The Code!', bottom right of the editor, to start the game!</h2>
+    <h3 style="text-align:center;color:green;">Enter Answers in box below the console (after click on 'Run The Code!')</h3>
+    <h4 style="text-align:center;color:grey;">Be patient, while it compiles the code after starting the game!</h4>
+</div>
+<div class="cfloat"></div>
+	
+	</body>
+</html>

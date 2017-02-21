@@ -1,0 +1,70 @@
+<html>
+<head>
+	<link type="text/css" rel="stylesheet" href="https://simplycoding.org/projects.css" />
+	<script src="https://simplycoding.org/files/javascript.js"></script>
+	<script src="https://simplycoding.org/files/run-the-code.js"></script>
+	<script src="https://simplycoding.org/files/simplyjs/simply.js"> </script>
+	<title>Python Text Adventure</title>
+	<style type="text/css">
+		.run-the-code-output {
+			height:200px;
+			overflow: scroll;
+		}
+
+	</style>
+
+
+</head>
+
+
+<body>	
+
+
+<div style="float:right;width:60%"> 
+	
+<textarea class="run-the-code" data-mode="java" data-height="300" data-output="120px">
+Scanner input = new Scanner (System.in);
+Random random = new Random ();
+int randomInt = random.nextInt (100);
+
+int amountOfGuesses = 7;
+System.out.println("Guess a number between 1 and 100 (no decimals)");
+int theUserGuess = input.nextInt();
+
+while (theUserGuess != randomInt && amountOfGuesses>0){
+    
+    if (theUserGuess < randomInt){
+        System.out.println("Too low, guess again. Amount of guesses " + amountOfGuesses);
+        amountOfGuesses--;
+        theUserGuess = input.nextInt();
+    }
+
+    if(theUserGuess > randomInt){
+        System.out.println("Too high, guess again Amount of Guesses " + amountOfGuesses);
+            amountOfGuesses--;
+            theUserGuess = input.nextInt();
+    }
+
+    if(theUserGuess == randomInt){
+               System.out.println("Congratulations you won!");
+               
+    } else if (amountOfGuesses < 1){
+        System.out.println("Sorry you lose. Play again?");       
+        System.out.print("Answer " + randomInt);
+    }
+
+}
+
+</textarea>
+
+</div>
+<div style="float:left;width:35%">
+        <h1 style="text-align:center">JAVA - Guess the Number!</h1>
+    <h2 style="text-align:center;color:blue;">Click 'Run The Code!', bottom right of the editor, to start the game!</h2>
+    <h3 style="text-align:center;color:green;">Enter Answers in box below the console (after click on 'Run The Code!')</h3>
+    <h4 style="text-align:center;color:grey;">Be patient, while it compiles the code after starting the game!</h4>
+</div>
+<div class="cfloat"></div>
+	
+	</body>
+</html>
