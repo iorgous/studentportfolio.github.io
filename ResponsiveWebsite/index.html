@@ -1,0 +1,229 @@
+
+<!DOCTYPE html>
+<html>
+<head>
+
+<title>Web</title>
+<link rel="stylesheet" type="text/css" href="19.css">
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">
+
+<script>
+  function validate(){
+
+    //name validate
+    var name = document.getElementById("name");
+    var blank_field = false;
+
+    if(name.value == ""){
+      name.style.backgroundColor = "pink";
+      blank_field = true;
+    } else {
+      name.style.backgroundColor = "lightgreen";
+    }
+
+    //title validate
+    var title = document.getElementById("title");
+
+    if(title.value == ""){
+      title.style.backgroundColor = "pink";
+      blank_field = true;
+    } else {
+      title.style.backgroundColor = "lightgreen";
+    }
+
+    //comment validate
+    var comment = document.getElementById("comment");
+
+    if(comment.value == ""){
+      comment.style.backgroundColor = "pink";
+      blank_field = true;
+    } else {
+      comment.style.backgroundColor = "lightgreen";
+    }
+
+    //drop down validate
+    var select_color = document.getElementById("select_color");
+    var select_bgcolor = document.getElementById("select_bgcolor");
+
+    if(select_color.value == "Choose A Color"){
+      select_color.style.border = "2px solid red";
+      blank_field = true;
+    } else if (select_bgcolor.value == "Choose A Color") {
+      select_bgcolor.style.border = "2px solid red";
+      blank_field = true;
+    } else {
+      select_color.style.border = "none";
+      select_bgcolor.style.border = "none";
+    }
+
+    //radio button validation
+    var icon = document.getElementsByName("icon");
+    var radiobtns = document.getElementById("radiobtns");
+    var blank_radio = true;
+    for(var i=0; i < icon.length; i++){
+      if(icon[i].checked == true){
+        blank_radio=false;
+     }
+    }
+
+    //error message
+    var error = document.getElementById("error");
+
+    if(blank_field == true){
+      error.innerHTML="<h3 style='color:red;'>You missed a spot!</h3>";
+    } else {
+      error.innerHTML="";
+      add();
+    }
+    
+  } //end function validate
+
+  var array = [];
+
+  function add(){
+    var name = document.getElementById("name");
+    var title = document.getElementById("title");
+    var comment = document.getElementById("comment");
+    var icon = document.getElementsByName("icon");
+    var icon_value; 
+    var select_color = document.getElementById("select_color");
+    var select_bgcolor = document.getElementById("select_bgcolor");
+
+
+    for(var i=0;i<icon.length;i++) {
+       if(icon[i].checked == true){
+            icon_value = icon[i].value;
+       } 
+   	}
+
+    
+    /* all variable and loops go above this */
+    var storage = {
+      name: name.value, 
+      title: title.value, 
+      comment: comment.value, 
+      icon: icon_value, select_color: 
+      select_color.value, 
+      select_bgcolor: select_bgcolor.value
+    }; 
+
+    /* the push comes after the object above */
+    array.push(storage);
+    show();
+
+  } //end function add
+
+  function show(){
+    var display = document.getElementById("display");
+    var post = "";
+
+    for(var i=0; i < array.length; i++){
+      post += "<div id='usercomment' style='background-color:"+array[i].select_bgcolor+";'>";
+      post += "<input type='checkbox' onclick='seth("+i+");'/>";
+      post += "<span style='color:"+array[i].select_color+";'>";
+      post += "<img src='"+array[i].icon+"' class='icon' />";
+      post += "<strong> "+array[i].name+ "</strong><br>";
+      post += "<strong> "+array[i].title+ "</strong><br>";
+      post += "<strong> "+array[i].comment+ "</strong><br>";
+      post += "</span>";
+      post += "</div>";
+    }
+ 
+    display.innerHTML = post;
+
+  } //end function show
+
+  function seth(index){
+    array.splice(index, 1);
+    show();
+  }
+
+</script>
+</head>
+<body>
+<div class="container">
+
+  <div class="row">
+    <div id="logo" class="col-xs-12 col-sm-4">
+            <img class="img-responsive" src="https://simplycoding.org/frontend/images/logo-5ef6edabce857170fd5d70f7641dac72.png" />
+
+    </div>
+  </div><!-- end logo row-->
+ 
+  <div class="row">
+    <div id="menu" class="col-xs-12">
+          
+      <ul class="nav nav-tabs">
+          <li><a href="#">Home</a></li>
+          <li><a href="#">Profile</a></li>
+          <li><a href="#">Messages</a></li>
+      </ul>
+    </div>
+  </div><!-- end menu row -->
+
+  <div class="row">
+      <div id="comments" class="col-xs-12 col-sm-5 col-md-6 col-lg-7">
+            COMMENTS
+            <div id="form" class="col-xs-12 col-sm-7 col-md-6 col-lg-5">
+              <header id="header">LEAVE A COMMENT</header>
+              <div id="error"></div>
+              <form class="form-inline">
+               
+                  <label>Name: </label>
+                  <input type="text" class="form-control" id="name" placeholder="Enter Name">
+
+                  <label>Color: </label>
+                  <select class="form-control" id="select_color">
+                    <option value="Choose A Color">Choose A Color</option>
+                    <option value="red">red</option>
+                    <option>blue</option>
+                    <option>orange</option>
+                    <option>green</option>
+                    <option>white</option>
+                  </select>
+  
+              </form>
+          
+              <form class="form-horizontal">
+                <label class="control-label">Title:</label>
+                 <input type="text" class="form-control" id="title" placeholder="Enter Title">
+
+                 <label class="control-label">Background Color: </label>
+                <select class="form-control" id="select_bgcolor">
+                  <option>Choose A Color</option>
+                  <option>red</option>
+                  <option>blue</option>
+                  <option>orange</option>
+                  <option>green</option>
+                  <option>white</option>
+                </select>
+            </form>
+            <form class="form-inline" id="radiobtns">
+                <label class="control-label" id="icon-label">Icons: </label> 
+
+                 <input type="radio" name="icon" value="Images/sheep.png">
+                 <img src="Images/sheep.png" class="icon" />
+
+                 <input type="radio" name="icon" value="Images/rabbit.png">
+                 <img src="Images/rabbit.png" class="icon" />
+
+                 <input type="radio" name="icon" value="Images/ice.png">
+                 <img src="Images/ice.png" class="icon" />
+                 
+                 <input type="radio" name="icon" value="Images/fire_v2.png">
+                 <img src="Images/fire_v2.png" class="icon" />   
+            </form>
+            
+             <label class="control-label">Comment:</label><br>
+            <textarea class="form-control" rows="8" id="comment"></textarea><br>
+            <input class="btn btn-default" type="button" value="Submit Comment" onclick="validate()">
+          </div> <!-- end form -->
+          <div id="display"></div>
+      </div> <!-- end comments -->
+
+  </div> <!-- end posts row -->
+
+</div> <!-- end container -->
+
+</body>
+</html>
