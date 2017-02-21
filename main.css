@@ -1,0 +1,58 @@
+#logo{
+	margin-bottom: -15px;
+	color:black;
+	border-radius: 15px;
+	font-size: 4em;
+	padding: 8px;
+}
+
+#links{
+	font-size: 1.5em;
+	text-decoration: underline;
+	font-style: italic;
+}
+
+#images{
+	margin-top: 2em;
+}
+
+#bkground{
+	background-color: lightgrey;
+	border-radius: 8px;
+}
+
+#webprojects{
+	margin-top:1em;
+	font-size:2em;
+	color:darkorange;
+	text-decoration: underline;
+}
+
+#jsbg{
+	margin-top:1em;
+	font-size:2em;
+	color:green;
+	text-decoration: underline;
+}
+
+#jsbgt{
+	margin-top:1em;
+	font-size:2em;
+	color:purple;
+	text-decoration: underline;
+}
+
+#java{
+	margin-top:1em;
+	font-size:2em;
+	color:blue;
+	text-decoration: underline;
+}
+
+
+
+
+
+
+
+
