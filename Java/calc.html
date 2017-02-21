@@ -1,0 +1,108 @@
+<html>
+<head>
+	<link type="text/css" rel="stylesheet" href="https://simplycoding.org/projects.css" />
+	<script src="https://simplycoding.org/files/javascript.js"></script>
+	<script src="https://simplycoding.org/files/run-the-code.js"></script>
+	<script src="https://simplycoding.org/files/simplyjs/simply.js"> </script>
+	<title>Python Text Adventure</title>
+	<style type="text/css">
+		.run-the-code-output {
+			height:200px;
+			overflow: scroll;
+		}
+
+	</style>
+
+
+</head>
+
+
+<body>	
+
+
+<div style="float:right;width:60%"> 
+	
+<textarea class="run-the-code" data-mode="java" data-height="300" data-output="120px"> 
+
+public static void main(String[] args) {
+
+  boolean proceed = true;
+  double var = getNumbers();
+  String menuAnswer = printMenu(var);
+
+  while (proceed == true) {
+    if (menuAnswer.equalsIgnoreCase("a")) {
+      var = add(var);
+      menuAnswer = printMenu(var);
+    } else if (menuAnswer.equalsIgnoreCase("s")) {
+      var = subtract(var);
+      menuAnswer = printMenu(var);
+    } else if (menuAnswer.equalsIgnoreCase("m")) {
+      var = multiply(var);
+      menuAnswer = printMenu(var);
+    } else if (menuAnswer.equalsIgnoreCase("d")) {
+      var = divide(var);
+      menuAnswer = printMenu(var);
+    } else if (menuAnswer.equalsIgnoreCase("x")) {
+      proceed = false;
+    } else {
+      System.out.println("You entered an incorrect value. Try again.\n");
+      menuAnswer = printMenu(var);
+    }
+  }
+}
+  
+public static double getNumbers(){
+  Scanner input = new Scanner(System.in);
+  System.out.println("Enter a number: ");
+  double var = input.nextDouble();
+  return var;
+}
+
+public static String printMenu(double var){
+  Scanner input = new Scanner(System.in);
+  System.out.println("Welcome to my calculator! Your number is : " + var );
+  System.out.println("Press 'a' to Add to you number");
+  System.out.println("Press 's' to Subtract to your number");
+  System.out.println("Press 'm' to Multiply to your number");
+  System.out.println("Press 'd' to Divide to you number");
+  System.out.println("Press 'x' to exit the program");
+  String userAnswer = input.nextLine();
+  return userAnswer;
+}
+
+public static double add(double var){
+  double var1 = getNumbers();
+  return var + var1;
+}
+
+public static double subtract(double var){
+  double var1 = getNumbers();
+  return var - var1;
+  
+}
+
+public static double multiply(double var){
+  double var1 = getNumbers();
+  return var * var1;
+}
+
+public static double divide(double var){
+  double var1 = getNumbers();
+  return var / var1;
+}
+
+       
+</textarea>
+
+</div>
+<div style="float:left;width:35%">
+        <h1 style="text-align:center">JAVA - My Calculator!</h1>
+    <h2 style="text-align:center;color:blue;">Click 'Run The Code!', bottom right of the editor, to start the game!</h2>
+    <h3 style="text-align:center;color:green;">Enter Answers in box below the console (after click on 'Run The Code!')</h3>
+    <h4 style="text-align:center;color:grey;">Be patient, while it compiles the code after starting the game!</h4>
+</div>
+<div class="cfloat"></div>
+	
+	</body>
+</html>
