@@ -1,0 +1,131 @@
+<!doctype html>
+<html>
+<head>
+  <title>SimplyJS</title>
+  <style>
+  body {
+    background-color:gray;
+  }
+  </style>
+  <script src="simply.js"></script>
+  <script>
+    var player, fishies = [], scoreTxt;
+    var incx, incy, score, firstStart = true;
+    var images = {fish_left: "fish2_flip.gif", fish_right: "fish2.gif",
+                  fishie_left: "fish3_flip.gif", fishie_right: "fish3.gif"};
+
+    function start()
+    {
+      sjs.openCanvas(800,500);
+      bg = sjs.Image("bg.jpg",800,500);
+      sjs.loadImages(images);
+      player = sjs.getImageCopy("fish_left");
+
+      sjs.newScreen("menu"); 
+      startBtn = sjs.Button("Start Game", 200,200, function(){ reset(); }, "Blue");
+    }
+    
+    function reset()
+    {
+      sjs.setScreen("game");
+      player.size(100,50);
+      player.move(100,0);
+      player.maxSpeed = 30;
+      player.accel = .2;
+      player.pushDown();
+      player.show();
+      incx = player.width * .05;
+      incy = player.height * .05;
+
+      score = 0;
+      if(scoreTxt)sjs.destroy(scoreTxt);
+      scoreTxt = sjs.Text("Score: 0",640,460,"Red",28);
+
+      if(firstStart){
+        setInterval(gameLoop, 1000/30);
+        setInterval(makeNewFish,1000);
+        firstStart=false;
+      }
+    }
+    function makeNewFish(){
+        if(score>10)return;
+	var dir = Math.round(Math.random()*1);
+	if(dir == 0){
+	  var newFish = sjs.Image("fish3.gif");
+          newFish.size(100,50);
+          var scale = (Math.random()*1.5) +.5;
+          newFish.width = Math.round(newFish.width*scale);
+          newFish.height = Math.round(newFish.height*scale);
+	  newFish.x = -newFish.width;
+	  newFish.sx = Math.round((Math.random() * 35)+10);
+	}
+	else {
+	  var newFish = sjs.Image("fish3_flip.gif");
+          newFish.size(100,50);
+          var scale = (Math.random()*1.5) +.5;
+          newFish.width = Math.round(newFish.width*scale);
+          newFish.height = Math.round(newFish.height*scale);
+	  newFish.x = 800+newFish.width;
+	  newFish.sx = -Math.round((Math.random() * 35)+10);
+	}
+        newFish.noBounds=true;
+        newFish.y = Math.round(Math.random()*(500-newFish.height));
+
+        newFish.show();
+	newFish.draw();
+	newFish.onHit(dir==0?RIGHT_SCREEN:LEFT_SCREEN, function(){
+          //console.log("destory....");
+          sjs.removeByValue(fishies,newFish);
+	  sjs.destroy(newFish);
+          //console.log(newFish);
+          //console.log("fishies_len",fishies.length);
+	});
+        fishies.push(newFish);
+    }
+
+    function gameLoop(){
+      bg.draw();
+      player.draw();
+      for(var i=0;i<fishies.length;i++){
+          fishies[i].draw();
+          if(score <= 10 && sjs.getOverlapRatio(fishies[i], player) > .2){
+	    sjs.destroy(fishies[i]);
+	    fishies.splice(i,1);
+	    i--;
+	    player.width += incx;
+	    player.height += incy;
+            score++;
+            scoreTxt.set("Score: "+score);
+            //scoreTxt.node.style.zIndex=10;
+            if(score > 10){
+              sjs.newScreen("Win");
+              sjs.Text("YOU WIN!",300,200,"Gold",42);
+              player.hide();
+              for(var j=0;j<fishies.length;j++){sjs.destroy(fishies[j]);}
+              fishies = [];
+              sjs.Button("Restart",360,280,reset);
+              sjs.setScreen("Win");
+            }
+          }
+      }
+      if(sjs.isPressed(UP_KEY)){player.pushUp();}
+      if(sjs.isPressed(DOWN_KEY)){player.pushDown();}
+      if(sjs.isPressed(LEFT_KEY)){
+        player.pushLeft();
+        player.switchImage(sjs.getImage("fish_left"));
+      }
+      if(sjs.isPressed(RIGHT_KEY)){
+        player.pushRight();
+        player.switchImage(sjs.getImage("fish_right"));
+      }
+  }
+  </script>
+</head>
+<body onload="start()">
+  <h2>Simply Test</h2>
+  <div style="background-color: lightgreen; margin:20px; padding:15px; width:800px;">
+    <canvas></canvas>
+  </div>
+  
+</body>
+</html>

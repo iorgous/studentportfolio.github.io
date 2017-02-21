@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html>
+  <head> 
+  	<title> Fish </title>
+
+    <script src="https://simplycoding.org/files/simplyjs/simply.js"> </script>
+    <script>
+
+ function start() {
+ 	sjs.open();
+
+ 	var score = 0;
+
+
+ 	var score_txt = new sjs.Text("Your Score: 0", 21, "orange");
+	score_txt.setText("Your Score: "+localStorage.getItem("score"));
+
+	var menu_txt = new sjs.Text("You Lose",28,"red");
+	menu_txt.centerH();
+
+	var startBtn = new sjs.Button("Try Again?", function(){
+ 		window.location = "index.html";
+	});
+
+	startBtn.center();
+
+	var info_txt = new sjs.Text("Created By Jacob Conterio",28,"black");
+	info_txt.bottom().centerH();
+
+	
+
+} //end start
+</script>
+
+</head>
+
+<body onload="start()"> <!-- The start function is called when the page is loaded  -->
+
+ <h1> Game Over </h1>
+
+   <!-- This is where our game will be on the page -->
+   <div id="target" style="margin:auto;background:grey;"></div>
+
+</body>
+</html>
