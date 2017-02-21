@@ -1,0 +1,460 @@
+<html>
+<head>
+	<link type="text/css" rel="stylesheet" href="https://simplycoding.org/projects.css" />
+	<script src="https://simplycoding.org/files/javascript.js"></script>
+	<script src="https://simplycoding.org/files/run-the-code.js"></script>
+	<script src="https://simplycoding.org/files/simplyjs/simply.js"> </script>
+	<title>Python Text Adventure</title>
+	<style type="text/css">
+		.run-the-code-output {
+			height:200px;
+			overflow: scroll;
+		}
+
+	</style>
+
+
+</head>
+
+
+<body>	
+
+
+<div style="float:right;width:60%"> 
+<textarea class="run-the-code" data-mode="python" data-height="300" data-output="120px">
+from kivy.app import App
+from kivy.core.window import Window
+from kivy.lang import Builder
+from kivy.uix.floatlayout import FloatLayout
+from kivy.uix.image import Image
+from kivy.uix.progressbar import ProgressBar
+from kivy.uix.label import Label
+from kivy.properties import NumericProperty, StringProperty
+from kivy.clock import Clock
+from starfield import Starfield
+from math import sin, cos, radians
+# Add in network libraries
+from PodSixNet.Connection import connection
+from PodSixNet.Connection import ConnectionListener
+
+
+# How many times the screen is updated per second.
+FPS = 30
+# Add a new variable to say if we are testing the game locally.
+DEBUG = False
+HOST = 'simplycodingcourses.com'
+PORT = 34002
+
+Builder.load_file('spacegame.kv')
+
+
+# Add ConnectionListener to say this object listens for network data
+class SpaceGame(FloatLayout, ConnectionListener):
+    def __init__(self):
+        FloatLayout.__init__(self)
+        
+        # Bind the keyboard
+        # The arguments are callbacks when an event occurs. These events can
+        # be 'closed', 'on_key_down', or 'on_key_up'.
+        self._keyboard = Window.request_keyboard(self._keyboard_closed, self)
+        self._keyboard.bind(on_key_down = self._on_keyboard_down)
+        self._keyboard.bind(on_key_up = self._on_keyboard_up)
+        
+        # Set up the controls
+        # What controls are currently be pressed.
+        self.controls = {
+            'thrust': 0,
+            'turning': 0,
+            'attack': 0,
+        }
+        # Make a copy of the controls
+        self.old_controls = dict(self.controls)
+        
+        self.space = FloatLayout()
+        self.add_widget(self.space)
+        
+        self.objects = {}
+        
+        self.hud = FloatLayout()
+        self.add_widget(self.hud)
+        
+        health_label = Label(text='Health')        
+        health_label.pos_hint = {'top': 1.4}
+        self.hud.add_widget(health_label)
+        
+        self.health = ProgressBar(
+            pos_hint = {
+                'top': 1,
+                'center_x': 0.5,
+            },
+            size_hint = (0.5, 0.1),
+            max = 100,
+            value = 75
+        )
+        
+        self.hud.add_widget(self.health)
+        
+        self.player_id = 0
+        
+        if DEBUG:
+            # Defines which object is being controlled by the player. They will be
+            # displayed in the center of the screen (permanently).
+            self.player_id = 1
+            
+            # Updated to use the function 'add_object' to make it easier to create
+            # and place new objects on the screen.
+            data = {
+                'object_id': 1,
+                'type': 'player',
+                'pos_x': 100,
+                'pos_y': 100,
+                'angle': 50,
+                'vel_x': 10,
+                'vel_y': 10,
+                'vel_angle': 120,
+            }
+            # Replace the four lines with add_object
+            self.update_object(data)
+            
+            data = {
+                'object_id': 2,
+                'type': 'player',
+                'pos_x': 100,
+                'pos_y': 100,
+                'angle': 50,
+                'vel_x': 0,
+                'vel_y': 0,
+                'vel_angle': -120,
+            }
+            self.update_object(data)
+            
+            # New stationary object for scrolling
+            data = {
+                'object_id': 3,
+                'type': 'planet',
+                'pos_x': 0,
+                'pos_y': 0,
+                'angle': 0,
+                'vel_x': 0,
+                'vel_y': 0,
+                'vel_angle': 0,
+            }
+            self.update_object(data)
+            
+            # Begin Temporary stuff for simulating locally
+            self.accel = 20
+            self.angle = 0
+            self.old_angle = -1
+            self.max_speed = 50
+            self.max_x = 0
+            self.max_y = 0
+            # End Temporary
+    
+    def update(self, delta_time):
+        if DEBUG:
+            # Begin Temporary stuff for simulating locally
+            # Let's be able to control the player ship. Turning specifically.
+            player = self.objects[self.player_id]
+            controls = self.controls
+            accel = self.accel * delta_time
+            angle = player.angle
+            
+            if controls['turning'] == 1:
+                player.vel_angle = -120
+            elif controls['turning'] == 2:
+                player.vel_angle = 120
+            else:
+                player.vel_angle = 0
+            
+            if self.old_angle != angle:
+                self.old_angle = angle
+                temp_vx = 0
+                temp_vy = 0
+                while abs(temp_vx) + abs(temp_vy) < self.max_speed:
+                    temp_vx += sin(radians(angle)) * accel
+                    temp_vy += cos(radians(angle)) * accel
+                
+                self.max_x = temp_vx
+                self.max_y = temp_vy
+            
+            max_x = self.max_x
+            max_y = self.max_y
+            
+            if controls['thrust'] == 1:
+                # Calculate what the future velocities will be. If they are greater
+                # than the max speeds calculated earlier, ignore it.
+                future_x = player.vel_x + sin(radians(angle)) * accel
+                future_y = player.vel_y + cos(radians(angle)) * accel
+                
+                if (future_y < max_y) if max_y > 0 else (future_y > max_y):
+                    player.vel_y = future_y
+                
+                if (future_x < max_x) if max_x > 0 else (future_x > max_x):
+                    player.vel_x = future_x
+            
+            # End Temporary
+            #if game has connected
+
+        if game.connected:
+            # Added code to request a health update and send controls, current status request
+            self.send_action({'action': 'player'})
+            #call method tells server if turning, moving or shooting
+            self.update_controls()
+            # Receive any new packets. recieve network data for me.  network : update, player and delete
+            self.Pump()
+        
+        for i in self.objects:
+            obj = self.objects[i]
+            obj.update(delta_time)
+
+        if self.player_id:
+            x = self.objects[self.player_id].true_pos[0]
+            y = self.objects[self.player_id].true_pos[1]
+            self.starfield.scroll(x, y, 0)
+
+            
+    
+    def update_object(self, data):
+        "Update an object based on the data given"
+        # If the object doesn't exist, create it.
+        object_id = data['object_id']
+        if object_id not in self.objects:
+            self.add_object(data)
+            return
+        
+        # Update it with new data.
+        self.objects[object_id].update_data(data)
+        
+        # If it is not the player, then tell the object who the player is.
+        if self.player_id and self.player_id != object_id:
+            player = self.objects[self.player_id]
+            self.objects[object_id].new_player(player)
+    
+    def add_object(self, data):
+        "Add new object to the screen."
+        object_id = data['object_id']
+        
+        # Image for each type of entity
+        if data['type'] == 'player':
+            image = 'images/a.png'
+            
+        elif data['type'] == 'bullet':
+            image = 'images/weapon.png'
+        
+        elif data['type'] == 'planet':
+            image = 'images/planet.png'
+            
+        else: # TODO: Create generic object image.
+            image = 'images/player.png'
+        
+        # Create the new object and update it with the data.
+        new_object = GenericObject(source=image)
+        self.objects[object_id] = new_object
+        self.update_object(data)
+        
+        # Add it to the display.
+        self.space.add_widget(new_object)
+    
+    def remove_object(self, object_id):
+        "Remove an object from the screen"
+        if object_id in self.objects:
+            obj = self.objects[object_id]
+            self.space.remove_widget(obj)
+            
+            # Delete all references. Clean up.
+            del self.objects[object_id]
+            del obj
+
+    
+    # Added function to update the server when new keys are pressed.
+    def update_controls(self):
+        "Check if there are updates to the controls. If so, send it to the server"
+        if self.controls != self.old_controls:
+            self.old_controls = dict(self.controls)
+            action = {
+                'action': 'controls',
+                'controls': self.old_controls,
+            }
+            self.send_action(action)
+
+    # Network Logic
+    # sends data to the server
+    def send_action(self, action):
+        "Send data to the server"
+        self.Send(action)
+      #server sends update action to the client, updates pos, x & y direction  
+    def Network_update(self, data):
+        "Server says these objects need updates"
+        for u in data['updates']:
+            # Don't pass an empty object
+            if u:
+                self.update_object(u)
+    
+    def Network_player(self, data):
+        "Response from server giving player data"
+        if 'info' in data:
+            if 'id' in data['info']:
+        # all positions are relatvie to your player
+                self.player_id = data['info']['id']
+                
+                self.health.max = data['info']['max_health']
+                self.health.value = data['info']['health']
+    
+    def Network_delete(self, data):
+        #bullet dissapears - remove objects
+        "Server says an object was removed"
+        self.remove_object(data['object_id'])
+    
+    # Added keyboard callbacks.
+    def _keyboard_closed(self):
+        "If the keyboard is closed for some reason (tablets) unbind it"
+        self._keyboard.unbind(on_key_down = self._on_keyboard_down)
+        self._keyboard = None
+
+    def _on_keyboard_down(self, keyboard, keycode, text, modifiers):
+        "When a key is pressed, update the controls"
+        key = keycode[1]
+        if key == 'w':
+            self.controls['thrust'] = 1
+        
+        if key == 'a':
+            self.controls['turning'] = 1
+        
+        elif key == 'd':
+            self.controls['turning'] = 2
+        
+        if key == 'spacebar':
+            self.controls['attack'] = 1
+
+    def _on_keyboard_up(self, keyboard, keycode):
+        "When a key is lifted, update the controls"
+        key = keycode[1]
+        if key == 'w':
+            self.controls['thrust'] = 0
+        
+        if key == 'a' or key == 'd':
+            self.controls['turning'] = 0
+        
+        if key == 'spacebar':
+            self.controls['attack'] = 0
+
+
+class GenericObject(Image):
+    "Any object displayed on the screen."
+    angle = NumericProperty(0)
+    source = StringProperty('images/player.png')
+    vel_x = NumericProperty(0)
+    vel_y = NumericProperty(0)
+    vel_angle = NumericProperty(0)
+    true_pos = (0, 0)
+    player = None
+    
+    def update_data(self, data):
+        "Update to the most recent values sent from the server."
+        self.true_pos = (data['pos_x'], data['pos_y'])
+        self.angle = data['angle']
+        self.vel_x = data['vel_x']
+        self.vel_y = data['vel_y']
+        self.vel_angle = data['vel_angle']
+        
+        # Update screen position
+        self.move()
+    
+    def update(self, delta_time):
+        "Update the screen based on velocities sent by the server."
+        pos = self.true_pos
+        angle = self.angle
+        
+        # Create updated values
+        new_x = pos[0] + (self.vel_x * delta_time)
+        new_y = pos[1] + (self.vel_y * delta_time)
+        new_angle = angle + (self.vel_angle * delta_time)
+        
+        # Update the variables
+        self.true_pos = (new_x, new_y)
+        self.angle = new_angle
+        
+        # Update screen position
+        self.move()
+    
+    def move(self):
+        "Move the object to the proper location on the screen"
+        if self.player:
+            # If the player object is set, set the position relative to the
+            # player object
+            new_x = (self.true_pos[0] - self.player.true_pos[0]) + (Window.width / 2.0)
+            new_y = (self.true_pos[1] - self.player.true_pos[1]) + (Window.height / 2.0)
+            self.center = (new_x, new_y)
+        else:
+            # If the player object is not set, assume it is the player object
+            # and set the position to the center of the screen
+            self.center = (Window.width / 2.0, Window.height / 2.0)
+    
+    def new_player(self, entity):
+        "Set the player object"
+        self.player = entity
+
+
+# Add the main app as a listener too.
+class SpaceApp(App, ConnectionListener):
+    
+    def __init__(self):
+        App.__init__(self)
+        self.connected = False
+        self.Connect((HOST, PORT))
+    
+    def update(self, delta_time):
+        # Update received packets
+        connection.Pump()
+        
+        # Update the App so it receives those messages
+        self.Pump()
+        
+        # Update the game screen.
+        self.game.update(delta_time)
+    
+    # Messages to indicate connection status
+    def Network_connected(self, data):
+        print 'Connected to the server!'
+        self.connected = True
+    
+    def Network_disconnected(self, data):
+        print 'Disconnected from the server!'
+        self.connected = False
+    
+    def Network_error(self, data):
+        print data
+    
+    def build(self):
+        # Return self.game as the main "widget"
+        self.game = SpaceGame()
+        # Change the clock to call self.update instead of self.game.update
+        Clock.schedule_interval(self.update, 1.0 / FPS)
+        return self.game
+
+
+if __name__ == '__main__':
+    game = SpaceApp()
+    game.run()
+
+
+ 
+</textarea>
+
+
+</div>
+<div style="float:left;width:35%">
+        <h1 style="text-align:center">PTYHON Multi Player Space ADVENTURE</h1>
+    <h2 style="text-align:center;color:blue;">Clicking 'Run The Code!' WILL NOT WORK! It has some imports and libraries that can't be run in a browser setting.</h2>
+    <h2 style="text-align:center;color:green;">Watch the Video Below to see the Game in Action!</h3>
+    <video width="100%" height="300" controls>
+        <source src="https://s3-us-west-2.amazonaws.com/simplycoding/Python/python.mp4">
+    </video>
+</div>
+<div class="cfloat"></div>
+<br><br>
+
+<br><bR><bR><br>
+	
+	</body>
+</html>
