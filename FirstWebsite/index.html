@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html>
+  <head>
+<link type="text/css" rel="stylesheet" href="website3.css" />
+    <title>
+Intro to Website
+    </title>
+
+<script type="text/javascript">
+
+  function bannerClick(){
+        var text = confirm("Did You Really Want to Click on My Banner.");
+        return text;
+  }
+
+  </script>
+  <script type="text/javascript">
+        function answer(){
+          var radio = document.getElementsByName("trivia");
+          var selection = false;
+          var message = "";
+
+           for( var i = 0; i < radio.length; i++) {
+              if(radio[i].value == "kcr" && radio[i].checked == true) {
+                selection = true;
+              } //end if statement
+            } //end for loop
+
+           if(selection == true) {
+            message = message + "<b><p style='color:green'>Way to go!</p></b>";
+            } else {
+            message = message + "<b><p style='color:red'>Try again my friend.</p></b>";
+            }
+            document.getElementById("response").innerHTML = message;
+          }
+  </script>
+
+  </head>
+  <body>
+
+    <div class="bkground">
+    <a href="https://bing.com" onclick="return bannerClick()" target="_blank">
+      <header class="banner"><p class="pad">Tribute to The Best Website in the World</p></header></a>
+
+    <nav id="navbar">
+    <a href="website7.html" target='_blank'>HOME</a>
+    |
+    <a href="website4.html" target='_blank'>Page2</a>
+    |
+    <a href="website5.html" target='_blank'>Page3</a>
+    </nav>
+
+    <div class="rtside">
+      <img class="img" src="https://thumbs.dreamstime.com/x/waterton-lake-moose-10756889.jpg" width="95%" /><br><br>
+      <iframe width="95%" class="img" height="315" src="https://www.youtube.com/embed/X3CmyWl8vc0" frameborder="0" allowfullscreen></iframe>   
+    </div>
+
+    <div class="fltlr"></div>
+
+    <div class="lftside">
+      <h1>My site</h1>
+
+      <p class="onep">
+        I was born in <u>St Louis</u> and have lived in 2 different countries and 6 different states.  This is my first webiste. I enjoy <mark>computers</mark> and learning programming.
+      </p> 
+
+      		<p class="plist"> Things I like:</p>
+      		<ol class="litems">
+        			<li>Baseball</li>
+        			<li>Fishing</li>
+        			<li>Building Websites</li>
+      		</ol>
+<br>
+      	<div class="border">
+          <h3 class="qheader">Baseball Trivia Question:</h3>
+      	   <em><b><div style="color:red; font-size:1.5em">Who won the World Series in 1985?</div></b></em><br />
+          <form>
+            <div id="response"></div>
+
+          	<input type="radio" name="trivia" value="stl">St Louis<br />
+
+          	<input type="radio" name="trivia" value="nyy">NY Yankees<br />
+
+          	<input type="radio" name="trivia" value="kcr">K.C. Royals<br />
+
+            <input type="radio" name="trivia" value="nym">NY Mets<br />
+
+          	<input type="button" value="Got it?" id="submit" onclick="answer()">
+          </form>
+
+        </div>
+
+    <br>
+    <br/>
+    <audio width="400" height="220" style="margin-bottom:27px" controls>
+      <source src="http://www.w3schools.com/tags/horse.mp3" type="audio/mpeg">
+      Your browser does not support HTML 5 audio.
+    </audio> 
+
+    <br />
+    <br />
+    </div>
+
+    <div class="fltclr"></div>
+    <br /><br />
+    <footer class="footer"><p class="pad">I hope you enjoy this footer</p></footer>
+
+    <hr />
+
+
+
+    <center>Dan Farling | <a href="http://espn.com" target="_blank">My favorite Website</a>
+    	</div>
+  </body>
+</html>
+
